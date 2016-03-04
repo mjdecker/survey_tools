@@ -64,11 +64,11 @@ $("body").keypress(
 			$('html, body').animate({scrollTop: 0}, 100);
 		} else if (event.which == 98) {
 			$("html, body").animate({ scrollTop: $(document).height() }, 100);
-		} else if (event.which == 113) {
+		}/* else if (event.which == 113) {
 			window.location = "/quit";
 		} else if (event.which == 108) {
 			window.location = "/list";
-		}
+		}*/
 	}	
 )
 
