@@ -1,12 +1,12 @@
 public static void assertDuration(double currentDuration,
-    long referenceDuraion, double referenceBIPS)
+    long referenceDuration, double referenceBIPS)
     throws AssertionFailedError {
-  double ajustedDuration = adjustExpectedDuration(referenceDuraion,
+  double ajustedDuration = adjustExpectedDuration(referenceDuration,
       referenceBIPS);
   if (currentDuration > ajustedDuration * SLACK_FACTOR) {
-    throw new AssertionFailedError(currentDuration
+    throw new AssertionFailedError("current duration "+ currentDuration
         + " exceeded expected "
-        + ajustedDuration + " (adjusted), "
-        + referenceDuraion + " (raw)");
+        + ajustedDuration + " (adjusted reference), "
+        + referenceDuration + " (raw reference)");
   }
 }
