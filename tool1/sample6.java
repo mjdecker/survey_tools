@@ -12,15 +12,12 @@ public ReferenceEntry<K, V> getLiveEntry(Object key, int hash) {
       }
 
       if (keyEquivalence.equivalent(key, entryKey)) {
-        if (expires() && isExpired(e)) {
-          return null;
-        }
-        if (isInvalid(e)) {
-          return null;
+        if (isLive(e)) {
+          recordRead(e);
+          return e;
         }
 
-        recordRead(e);
-        return e;
+        return null;
       }
     }
   }
