@@ -3,20 +3,22 @@ public void expandFolds(int foldLevel, boolean update)
   if(buffer.getFoldHandler() instanceof IndentFoldHandler)
     foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
-  showLineRange(0,buffer.getLineCount() - 1);
+  int lineCount = buffer.getLineCount();
+  int end = lineCount - 1;
+  showLineRange(0,end);
 
   int leastFolded = -1;
   int firstInvisible = 0;
 
-  for(int i = 0; i < buffer.getLineCount(); i++)
+  for(int i = 0; i < lineCount; i++)
   {
-    if (leastFolded == -1 || buffer.getFoldLevel(i) < leastFolded)
+    int level = buffer.getFoldLevel(i);
+    if (leastFolded == -1 || level < leastFolded)
     {
-      leastFolded = buffer.getFoldLevel(i);
+      leastFolded = level;
     }
   
-    if (buffer.getFoldLevel(i) < foldLevel ||
-        buffer.getFoldLevel(i) == leastFolded)
+    if (level < foldLevel || level == leastFolded)
     {
       if(firstInvisible != i)
       {
@@ -27,8 +29,8 @@ public void expandFolds(int foldLevel, boolean update)
     }
   }
 
-  if(firstInvisible != buffer.getLineCount())
-    hideLineRange(firstInvisible,buffer.getLineCount() - 1);
+  if(firstInvisible != lineCount)
+    hideLineRange(firstInvisible,end);
 
   notifyScreenLineChanges();
   if(update && textArea.getDisplayManager() == this)
