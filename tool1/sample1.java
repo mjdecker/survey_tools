@@ -8,7 +8,7 @@ public void testGeoHashValue() throws Exception {
             .endObject().endObject().string();
 
     DocumentMapper defaultMapper
-    = MapperTestUtils.newParser().parse(mapping);
+    = createIndex("test").mapperService().documentMapperParser().parse(mapping);
 
     ParsedDocument doc = defaultMapper.parse("type", "1", XContentFactory
             .jsonBuilder()
