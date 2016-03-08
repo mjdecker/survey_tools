@@ -1,1 +1,4 @@
-public boolean isShutdown() { return shutdown; }
+@Override
+public boolean isShutdown() {
+  return false;
+}
