@@ -44,11 +44,8 @@ void physDown(int amount, int screenAmount)
       + physicalLine + ":" + scrollLine);
   }
 
-  if(screenAmount != 0)
-  {
-    if(screenAmount < 0)
-      scrollUp(-screenAmount);
-    else
-      scrollDown(screenAmount);
-  }
+  if(screenAmount < 0)
+    scrollUp(-screenAmount);
+  else if(screenAmount > 0)
+    scrollDown(screenAmount);
 }
