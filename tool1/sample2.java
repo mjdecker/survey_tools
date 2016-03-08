@@ -2,7 +2,7 @@ public Field getCompletionField(ContextMapping.Context ctx,
                                 String input, BytesRef payload) {
     final String originalInput = input;
     if (input.length() > maxInputLength) {
-        final int len = correctSubStringLen(input, 
+        final int len = correctSubStringLen(input,
             Math.min(maxInputLength, input.length()));
         input = input.substring(0, len);
     }
@@ -15,7 +15,7 @@ public Field getCompletionField(ContextMapping.Context ctx,
                     + "] at position " + i + " is a reserved character");
         }
     }
-    return new SuggestField(fieldType.names().indexName(),
-        ctx, input, this.fieldType, payload,
+    return new SuggestField(fieldType().names().indexName(),
+        ctx, input, fieldType(), payload,
         fieldType().analyzingSuggestLookupProvider);
 }
