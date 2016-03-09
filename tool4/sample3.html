@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>GumTree</title><link type="text/css" href="res/web/bootstrap.min.css" rel="stylesheet"/><link type="text/css" href="res/web/gumtree.css" rel="stylesheet"/></head><body><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="btn-toolbar pull-right"><div class="btn-group"><a class="btn btn-default btn-xs" id="legend" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>" data-original-title="Legend" title="Legend" role="button">Legend</a><a class="btn btn-default btn-xs" id="shortcuts" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom" data-original-title="Shortcuts" title="Shortcuts" role="button">Shortcuts</a></div><div class="btn-group"><a class="btn btn-default btn-xs btn-danger" href="/quit">Quit</a></div></div></div></div><div class="row"><div class="col-lg-6 max-height"><h5>original.java</h5><pre class="pre max-height">class foo {
+
+
+
+@Test
+public void passQueryAsJSONStringTest() throws Exception {
+    <span class="marker" id="mapping-1"></span><span class="token del" data-title="ExpressionStatement/MethodInvocation"><span class="marker" id="mapping-2"></span><span class="token mv" id="move-src-1" data-title="MethodInvocation/MethodInvocation"><span class="marker" id="mapping-3"></span><span class="token del" data-title="MethodInvocation/MethodInvocation">client().admin().indices()</span>.prepareCreate("test").setSettings(
+        <span class="marker" id="mapping-4"></span><span class="token del" data-title="MethodInvocation/MethodInvocation"><span class="marker" id="mapping-5"></span><span class="token mv" id="move-src-2" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-6"></span><span class="token upd" id="move-src-3" data-title="MethodInvocation/SimpleName"><span class="cupd">I</span>mmutableSettings</span></span>.settingsBuilder().put("index.number_of_shards", <span class="marker" id="mapping-7"></span><span class="token mv" id="move-src-4" data-title="MethodInvocation/NumberLiteral">1</span>)</span>)</span>.execute().actionGet()</span>;
+
+    <span class="marker" id="mapping-8"></span><span class="token del" data-title="ExpressionStatement/MethodInvocation"><span class="marker" id="mapping-9"></span><span class="token mv" id="move-src-5" data-title="MethodInvocation/MethodInvocation">client().prepareIndex("test", "type1", "1")
+        .setSource("field1", "value1_1", "field2", "value2_1")
+        .setRefresh(true).<span class="marker" id="mapping-10"></span><span class="token upd" id="move-src-6" data-title="MethodInvocation/SimpleName"><span class="cupd">e</span>xecute</span>()</span>.actionGet()</span>;
+
+    WrapperQueryBuilder wrapper
+         = new WrapperQueryBuilder("{ \"term\" : { \"field1\" : \"value1_1\" } }");
+    <span class="marker" id="mapping-11"></span><span class="token del" data-title="Block/VariableDeclarationStatement">CountResponse countResponse = <span class="marker" id="mapping-12"></span><span class="token mv" id="move-src-7" data-title="VariableDeclarationFragment/MethodInvocation"><span class="marker" id="mapping-13"></span><span class="token mv" id="move-src-8" data-title="MethodInvocation/MethodInvocation">client().prepareCount()
+        .setQuery(wrapper).<span class="marker" id="mapping-14"></span><span class="token upd" id="move-src-9" data-title="MethodInvocation/SimpleName"><span class="cupd">e</span>xecute</span>()</span>.<span class="marker" id="mapping-15"></span><span class="token upd" id="move-src-10" data-title="MethodInvocation/SimpleName"><span class="cupd">a</span>c<span class="cupd">t</span><span class="cupd">i</span><span class="cupd">o</span><span class="cupd">n</span>Get</span>()</span>;</span>
+    <span class="marker" id="mapping-16"></span><span class="token del" data-title="ExpressionStatement/MethodInvocation">assertHitCount(countResponse, 1l)</span>;
+
+    BoolQueryBuilder bool = <span class="marker" id="mapping-17"></span><span class="token del" data-title="VariableDeclarationFragment/ClassInstanceCreation">new BoolQueryBuilder()</span>;
+    <span class="marker" id="mapping-18"></span><span class="token del" data-title="Block/ExpressionStatement">bool.must(wrapper);</span>
+    <span class="marker" id="mapping-19"></span><span class="token del" data-title="Block/ExpressionStatement"><span class="marker" id="mapping-20"></span><span class="token mv" id="move-src-11" data-title="ExpressionStatement/MethodInvocation"><span class="marker" id="mapping-21"></span><span class="token mv" id="move-src-12" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-22"></span><span class="token upd" id="move-src-13" data-title="MethodInvocation/SimpleName"><span class="cupd">bool</span></span></span>.<span class="marker" id="mapping-23"></span><span class="token mv" id="move-src-14" data-title="MethodInvocation/SimpleName">must</span>(new TermQueryBuilder(
+        "field2", "value2_1"))</span>;</span>
+
+    <span class="marker" id="mapping-24"></span><span class="token del" data-title="Block/ExpressionStatement">countResponse = <span class="marker" id="mapping-25"></span><span class="token mv" id="move-src-15" data-title="MethodInvocation/MethodInvocation">client().prepareCount().setQuery(<span class="marker" id="mapping-26"></span><span class="token upd" id="move-src-16" data-title="MethodInvocation/SimpleName">wrapper</span>)</span>.execute().<span class="marker" id="mapping-27"></span><span class="token mv" id="move-src-17" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-28"></span><span class="token upd" id="move-src-18" data-title="MethodInvocation/SimpleName">actionG<span class="cupd">et</span></span></span>();</span>
+    <span class="marker" id="mapping-29"></span><span class="token del" data-title="Block/ExpressionStatement">assertHitCount(countResponse, <span class="marker" id="mapping-30"></span><span class="token mv" id="move-src-19" data-title="MethodInvocation/NumberLiteral">1l</span>);</span>
+}
+
+
+
+
+}</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">class foo {
+
+
+
+@Test
+public void passQueryAsJSONStringTest() throws Exception {
+    <span class="marker" id="mapping-31"></span><span class="token add" data-title="ExpressionStatement/MethodInvocation">assertAcked(<span class="marker" id="mapping-32"></span><span class="token mv" id="move-dst-1" data-title="MethodInvocation/MethodInvocation">prepareCreate("test").setSettings(<span class="marker" id="mapping-33"></span><span class="token mv" id="move-dst-3" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-34"></span><span class="token upd" id="move-dst-3" data-title="MethodInvocation/SimpleName">SETT<span class="cupd">I</span>NG_NUMBER_OF_SHARDS</span></span>,
+         <span class="marker" id="mapping-35"></span><span class="token mv" id="move-dst-4" data-title="MethodInvocation/NumberLiteral">1</span>)</span>)</span>;
+
+    <span class="marker" id="mapping-36"></span><span class="token mv" id="move-dst-5" data-title="ExpressionStatement/MethodInvocation">client().prepareIndex("test", "type1", "1")
+        .setSource("field1", "value1_1", "field2", "value2_1")
+        .setRefresh(true).<span class="marker" id="mapping-37"></span><span class="token upd" id="move-dst-6" data-title="MethodInvocation/SimpleName">g<span class="cupd">e</span>t</span>()</span>;
+
+    WrapperQueryBuilder wrapper
+         = new WrapperQueryBuilder("{ \"term\" : { \"field1\" : \"value1_1\" } }");
+    <span class="marker" id="mapping-38"></span><span class="token mv" id="move-dst-7" data-title="ExpressionStatement/MethodInvocation"><span class="marker" id="mapping-39"></span><span class="token upd" id="move-dst-10" data-title="MethodInvocation/SimpleName"><span class="cupd">a</span>sser<span class="cupd">t</span>H<span class="cupd">i</span>tC<span class="cupd">o</span>u<span class="cupd">n</span>t</span>(<span class="marker" id="mapping-40"></span><span class="token mv" id="move-dst-8" data-title="MethodInvocation/MethodInvocation">client().prepareCount()
+        .setQuery(wrapper).<span class="marker" id="mapping-41"></span><span class="token upd" id="move-dst-9" data-title="MethodInvocation/SimpleName">g<span class="cupd">e</span>t</span>()</span>, <span class="marker" id="mapping-42"></span><span class="token add" data-title="MethodInvocation/NumberLiteral">1l</span>)</span>;
+
+    BoolQueryBuilder bool = <span class="marker" id="mapping-43"></span><span class="token mv" id="move-dst-11" data-title="VariableDeclarationFragment/MethodInvocation"><span class="marker" id="mapping-44"></span><span class="token add" data-title="MethodInvocation/MethodInvocation"><span class="marker" id="mapping-45"></span><span class="token mv" id="move-dst-13" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-46"></span><span class="token upd" id="move-dst-13" data-title="MethodInvocation/SimpleName"><span class="cupd">bool</span>Query</span></span>().<span class="marker" id="mapping-47"></span><span class="token mv" id="move-dst-14" data-title="MethodInvocation/SimpleName">must</span>(wrapper)</span>.<span class="marker" id="mapping-48"></span><span class="token add" data-title="MethodInvocation/SimpleName">must</span>(new TermQueryBuilder(
+        "field2", "value2_1"))</span>;
+    <span class="marker" id="mapping-49"></span><span class="token add" data-title="Block/ExpressionStatement">assertHitCount(<span class="marker" id="mapping-50"></span><span class="token mv" id="move-dst-15" data-title="MethodInvocation/MethodInvocation">client().prepareCount().setQuery(<span class="marker" id="mapping-51"></span><span class="token upd" id="move-dst-16" data-title="MethodInvocation/SimpleName">bool</span>)</span>.<span class="marker" id="mapping-52"></span><span class="token mv" id="move-dst-18" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-53"></span><span class="token upd" id="move-dst-18" data-title="MethodInvocation/SimpleName">g<span class="cupd">et</span></span></span>(), <span class="marker" id="mapping-54"></span><span class="token mv" id="move-dst-19" data-title="MethodInvocation/NumberLiteral">1l</span>);</span>
+}
+
+
+
+    
+}</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>

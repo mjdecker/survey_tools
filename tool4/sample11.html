@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>GumTree</title><link type="text/css" href="res/web/bootstrap.min.css" rel="stylesheet"/><link type="text/css" href="res/web/gumtree.css" rel="stylesheet"/></head><body><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="btn-toolbar pull-right"><div class="btn-group"><a class="btn btn-default btn-xs" id="legend" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>" data-original-title="Legend" title="Legend" role="button">Legend</a><a class="btn btn-default btn-xs" id="shortcuts" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom" data-original-title="Shortcuts" title="Shortcuts" role="button">Shortcuts</a></div><div class="btn-group"><a class="btn btn-default btn-xs btn-danger" href="/quit">Quit</a></div></div></div></div><div class="row"><div class="col-lg-6 max-height"><h5>original.java</h5><pre class="pre max-height">class foo {
+
+
+
+public void expandFolds(int foldLevel, boolean update)
+{
+  if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+    foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+  <span class="marker" id="mapping-1"></span><span class="token del" data-title="Block/ExpressionStatement">showLineRange(0,<span class="marker" id="mapping-2"></span><span class="token mv" id="move-src-1" data-title="MethodInvocation/SimpleName">buffer</span>.<span class="marker" id="mapping-3"></span><span class="token mv" id="move-src-2" data-title="MethodInvocation/SimpleName">getLineCount</span>() - <span class="marker" id="mapping-4"></span><span class="token mv" id="move-src-3" data-title="InfixExpression/NumberLiteral">1</span>);</span>
+
+  int leastFolded = -1;
+  int firstInvisible = 0;
+
+  for(int i = 0; i &lt; <span class="marker" id="mapping-5"></span><span class="token del" data-title="InfixExpression/MethodInvocation">buffer.getLineCount()</span>; i++)
+  {
+    if (leastFolded == -1 || <span class="marker" id="mapping-6"></span><span class="token del" data-title="InfixExpression/MethodInvocation">buffer.getFoldLevel(i)</span> &lt; leastFolded)
+    {
+      leastFolded = <span class="marker" id="mapping-7"></span><span class="token del" data-title="Assignment/MethodInvocation">buffer.getFoldLevel(i)</span>;
+    }
+  
+    if (<span class="marker" id="mapping-8"></span><span class="token del" data-title="InfixExpression/MethodInvocation">buffer.getFoldLevel(i)</span> &lt; foldLevel ||
+        <span class="marker" id="mapping-9"></span><span class="token del" data-title="InfixExpression/MethodInvocation">buffer.getFoldLevel(i)</span> == leastFolded)
+    {
+      if(firstInvisible != i)
+      {
+        hideLineRange(firstInvisible,
+          i - 1);
+      }
+      firstInvisible = i + 1;
+    }
+  }
+
+  if(firstInvisible != <span class="marker" id="mapping-10"></span><span class="token del" data-title="InfixExpression/MethodInvocation">buffer.getLineCount()</span>)
+    hideLineRange(firstInvisible,<span class="marker" id="mapping-11"></span><span class="token del" data-title="MethodInvocation/InfixExpression"><span class="marker" id="mapping-12"></span><span class="token mv" id="move-src-4" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-13"></span><span class="token upd" id="move-src-5" data-title="MethodInvocation/SimpleName">buffer</span></span>.getLineCount() - 1</span>);
+
+  notifyScreenLineChanges();
+  if(update &amp;&amp; textArea.getDisplayManager() == this)
+  {
+    textArea.foldStructureChanged();
+  }
+}
+
+
+
+
+}</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">class foo {
+
+
+
+public void expandFolds(int foldLevel, boolean update)
+{
+  if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+    foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+  <span class="marker" id="mapping-14"></span><span class="token add" data-title="Block/VariableDeclarationStatement">int lineCount = <span class="marker" id="mapping-15"></span><span class="token mv" id="move-dst-1" data-title="MethodInvocation/SimpleName">buffer</span>.<span class="marker" id="mapping-16"></span><span class="token mv" id="move-dst-2" data-title="MethodInvocation/SimpleName">getLineCount</span>();</span>
+  <span class="marker" id="mapping-17"></span><span class="token add" data-title="Block/VariableDeclarationStatement">int end = lineCount - <span class="marker" id="mapping-18"></span><span class="token mv" id="move-dst-3" data-title="InfixExpression/NumberLiteral">1</span>;</span>
+  <span class="marker" id="mapping-19"></span><span class="token add" data-title="Block/ExpressionStatement">showLineRange(0,end);</span>
+
+  int leastFolded = -1;
+  int firstInvisible = 0;
+
+  for(int i = 0; i &lt; <span class="marker" id="mapping-20"></span><span class="token add" data-title="InfixExpression/SimpleName">lineCount</span>; i++)
+  {
+    <span class="marker" id="mapping-21"></span><span class="token add" data-title="Block/VariableDeclarationStatement">int level = buffer.getFoldLevel(i);</span>
+    if (leastFolded == -1 || <span class="marker" id="mapping-22"></span><span class="token add" data-title="InfixExpression/SimpleName">level</span> &lt; leastFolded)
+    {
+      leastFolded = <span class="marker" id="mapping-23"></span><span class="token add" data-title="Assignment/SimpleName">level</span>;
+    }
+  
+    if (<span class="marker" id="mapping-24"></span><span class="token add" data-title="InfixExpression/SimpleName">level</span> &lt; foldLevel || <span class="marker" id="mapping-25"></span><span class="token add" data-title="InfixExpression/SimpleName">level</span> == leastFolded)
+    {
+      if(firstInvisible != i)
+      {
+        hideLineRange(firstInvisible,
+          i - 1);
+      }
+      firstInvisible = i + 1;
+    }
+  }
+
+  if(firstInvisible != <span class="marker" id="mapping-26"></span><span class="token add" data-title="InfixExpression/SimpleName">lineCount</span>)
+    hideLineRange(firstInvisible,<span class="marker" id="mapping-27"></span><span class="token mv" id="move-dst-5" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-28"></span><span class="token upd" id="move-dst-5" data-title="MethodInvocation/SimpleName">end</span></span>);
+
+  notifyScreenLineChanges();
+  if(update &amp;&amp; textArea.getDisplayManager() == this)
+  {
+    textArea.foldStructureChanged();
+  }
+}
+
+
+
+    
+}</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>

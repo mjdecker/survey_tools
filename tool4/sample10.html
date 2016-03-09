@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>GumTree</title><link type="text/css" href="res/web/bootstrap.min.css" rel="stylesheet"/><link type="text/css" href="res/web/gumtree.css" rel="stylesheet"/></head><body><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="btn-toolbar pull-right"><div class="btn-group"><a class="btn btn-default btn-xs" id="legend" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>" data-original-title="Legend" title="Legend" role="button">Legend</a><a class="btn btn-default btn-xs" id="shortcuts" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<b>q</b> quit<br><b>l</b> list<br><b>n</b> next<br><b>t</b> top<br><b>b</b> bottom" data-original-title="Shortcuts" title="Shortcuts" role="button">Shortcuts</a></div><div class="btn-group"><a class="btn btn-default btn-xs btn-danger" href="/quit">Quit</a></div></div></div></div><div class="row"><div class="col-lg-6 max-height"><h5>original.java</h5><pre class="pre max-height">package com.google.common.cache;
+
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.cache.LocalCache.Strength;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
+
+class CacheBuilderFactory {
+  private Set&lt;Integer&gt; concurrencyLevels = Sets.newHashSet((Integer) null);
+  private Set&lt;Integer&gt; initialCapacities = Sets.newHashSet((Integer) null);
+  private Set&lt;Integer&gt; maximumSizes = Sets.newHashSet((Integer) null);
+  private <span class="marker" id="mapping-1"></span><span class="token upd" id="move-src-1" data-title="FieldDeclaration/ParameterizedType"><span class="cupd">Set&lt;</span><span class="marker" id="mapping-2"></span><span class="token upd" id="move-src-2" data-title="ParameterizedType/SimpleType"><span class="marker" id="mapping-3"></span><span class="token upd" id="move-src-3" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd"><span class="cupd">rationSpec</span></span></span></span>&gt;</span></span> <span class="marker" id="mapping-4"></span><span class="token upd" id="move-src-4" data-title="VariableDeclarationFragment/SimpleName"><span class="cupd">expir</span>a<span class="cupd">t</span><span class="cupd">i</span>ons</span> = Sets.newHashSet((<span class="marker" id="mapping-5"></span><span class="token upd" id="move-src-5" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-6"></span><span class="token upd" id="move-src-6" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) null);
+  private Set&lt;Strength&gt; keyStrengths = Sets.newHashSet((Strength) null);
+  private Set&lt;Strength&gt; valueStrengths = Sets.newHashSet((Strength) null);
+
+  CacheBuilderFactory withConcurrencyLevels(Set&lt;Integer&gt; concurrencyLevels) {
+    this.concurrencyLevels = Sets.newLinkedHashSet(concurrencyLevels);
+    return this;
+  }
+
+  CacheBuilderFactory withInitialCapacities(Set&lt;Integer&gt; initialCapacities) {
+    this.initialCapacities = Sets.newLinkedHashSet(initialCapacities);
+    return this;
+  }
+
+  CacheBuilderFactory withMaximumSizes(Set&lt;Integer&gt; maximumSizes) {
+    this.maximumSizes = Sets.newLinkedHashSet(maximumSizes);
+    return this;
+  }
+
+  CacheBuilderFactory <span class="marker" id="mapping-7"></span><span class="token upd" id="move-src-7" data-title="MethodDeclaration/SimpleName"><span class="cupd">withExpir</span>a<span class="cupd">t</span><span class="cupd">i</span>ons</span>(<span class="marker" id="mapping-8"></span><span class="token upd" id="move-src-8" data-title="SingleVariableDeclaration/ParameterizedType"><span class="cupd">Set&lt;</span><span class="marker" id="mapping-9"></span><span class="token upd" id="move-src-9" data-title="ParameterizedType/SimpleType"><span class="marker" id="mapping-10"></span><span class="token upd" id="move-src-10" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd"><span class="cupd">rationSpec</span></span></span></span>&gt;</span></span> <span class="marker" id="mapping-11"></span><span class="token upd" id="move-src-11" data-title="SingleVariableDeclaration/SimpleName">expi<span class="cupd">rations</span></span>) {
+    this.<span class="marker" id="mapping-12"></span><span class="token upd" id="move-src-12" data-title="FieldAccess/SimpleName"><span class="cupd">expir</span>a<span class="cupd">t</span><span class="cupd">i</span>ons</span> = Sets.newLinkedHashSet(<span class="marker" id="mapping-13"></span><span class="token upd" id="move-src-13" data-title="MethodInvocation/SimpleName">expi<span class="cupd">rations</span></span>);
+    return this;
+  }
+
+  CacheBuilderFactory withKeyStrengths(Set&lt;Strength&gt; keyStrengths) {
+    this.keyStrengths = Sets.newLinkedHashSet(keyStrengths);
+    Preconditions.checkArgument(!this.keyStrengths.contains(Strength.SOFT));
+    return this;
+  }
+
+  CacheBuilderFactory withValueStrengths(Set&lt;Strength&gt; valueStrengths) {
+    this.valueStrengths = Sets.newLinkedHashSet(valueStrengths);
+    return this;
+  }
+
+  Iterable&lt;CacheBuilder&lt;Object, Object&gt;&gt; buildAllPermutations() {
+    @SuppressWarnings("unchecked")
+    Iterable&lt;List&lt;Object&gt;&gt; combinations = buildCartesianProduct(concurrencyLevels,
+        initialCapacities, maximumSizes, <span class="marker" id="mapping-14"></span><span class="token upd" id="move-src-14" data-title="MethodInvocation/SimpleName"><span class="cupd">expir</span>a<span class="cupd">t</span><span class="cupd">i</span>ons</span>, keyStrengths, valueStrengths);
+    return Iterables.transform(combinations,
+        new Function&lt;List&lt;Object&gt;, CacheBuilder&lt;Object, Object&gt;&gt;() {
+          @Override public CacheBuilder&lt;Object, Object&gt; apply(List&lt;Object&gt; combination) {
+            return createCacheBuilder(
+                (Integer) combination.get(0),
+                (Integer) combination.get(1),
+                (Integer) combination.get(2),
+                (<span class="marker" id="mapping-15"></span><span class="token upd" id="move-src-15" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-16"></span><span class="token upd" id="move-src-16" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) combination.get(3),
+                (Strength) combination.get(<span class="marker" id="mapping-17"></span><span class="token upd" id="move-src-17" data-title="MethodInvocation/NumberLiteral">4</span>),
+                (Strength) combination.get(<span class="marker" id="mapping-18"></span><span class="token upd" id="move-src-18" data-title="MethodInvocation/NumberLiteral">5</span>));
+          }
+        });
+  }
+
+  private static final Function&lt;Object, Optional&lt;?&gt;&gt; NULLABLE_TO_OPTIONAL =
+      new Function&lt;Object, Optional&lt;?&gt;&gt;() {
+        @Override public Optional&lt;?&gt; apply(@Nullable Object obj) {
+          return Optional.fromNullable(obj);
+        }
+      };
+
+  private static final Function&lt;Optional&lt;?&gt;, Object&gt; OPTIONAL_TO_NULLABLE =
+      new Function&lt;Optional&lt;?&gt;, Object&gt;() {
+        @Override public Object apply(Optional&lt;?&gt; optional) {
+          return optional.orNull();
+        }
+      };
+
+  private Iterable&lt;List&lt;Object&gt;&gt; buildCartesianProduct(Set&lt;?&gt;... sets) {
+    List&lt;Set&lt;Optional&lt;?&gt;&gt;&gt; optionalSets = Lists.newArrayListWithExpectedSize(sets.length);
+    for (Set&lt;?&gt; set : sets) {
+      Set&lt;Optional&lt;?&gt;&gt; optionalSet =
+          Sets.newLinkedHashSet(Iterables.transform(set, NULLABLE_TO_OPTIONAL));
+      optionalSets.add(optionalSet);
+    }
+    Set&lt;List&lt;Optional&lt;?&gt;&gt;&gt; cartesianProduct = Sets.cartesianProduct(optionalSets);
+    return Iterables.transform(cartesianProduct,
+        new Function&lt;List&lt;Optional&lt;?&gt;&gt;, List&lt;Object&gt;&gt;() {
+          @Override public List&lt;Object&gt; apply(List&lt;Optional&lt;?&gt;&gt; objs) {
+            return Lists.transform(objs, OPTIONAL_TO_NULLABLE);
+          }
+        });
+  }
+
+  private CacheBuilder&lt;Object, Object&gt; createCacheBuilder(
+      Integer concurrencyLevel, Integer initialCapacity, Integer maximumSize,
+      <span class="marker" id="mapping-19"></span><span class="token upd" id="move-src-19" data-title="SingleVariableDeclaration/SimpleType"><span class="marker" id="mapping-20"></span><span class="token upd" id="move-src-20" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> <span class="marker" id="mapping-21"></span><span class="token upd" id="move-src-21" data-title="SingleVariableDeclaration/SimpleName"><span class="cupd">expir</span>a<span class="cupd">t</span>ion</span>, Strength keyStrength, Strength valueStrength) {
+
+    CacheBuilder&lt;Object, Object&gt; builder = CacheBuilder.newBuilder();
+    if (concurrencyLevel != null) {
+      builder.concurrencyLevel(concurrencyLevel);
+    }
+    if (initialCapacity != null) {
+      builder.initialCapacity(initialCapacity);
+    }
+    if (maximumSize != null) {
+      builder.maximumSize(maximumSize);
+    }
+    <span class="marker" id="mapping-22"></span><span class="token del" data-title="Block/IfStatement">if (<span class="marker" id="mapping-23"></span><span class="token mv" id="move-src-22" data-title="IfStatement/InfixExpression"><span class="marker" id="mapping-24"></span><span class="token upd" id="move-src-23" data-title="InfixExpression/SimpleName"><span class="cupd">expir</span>a<span class="cupd">t</span>ion</span> != null</span>) {
+      <span class="marker" id="mapping-25"></span><span class="token mv" id="move-src-24" data-title="Block/IfStatement">if (<span class="marker" id="mapping-26"></span><span class="token del" data-title="InfixExpression/QualifiedName">expiration.expireAfterAccessMillis</span> != null) {
+        builder.expireAfterAccess(<span class="marker" id="mapping-27"></span><span class="token upd" id="move-src-25" data-title="MethodInvocation/QualifiedName"><span class="cupd">expir</span>ation.<span class="cupd">e</span>xpire<span class="cupd">AfterAccess</span>Millis</span>, <span class="marker" id="mapping-28"></span><span class="token upd" id="move-src-26" data-title="MethodInvocation/QualifiedName">T<span class="cupd">i</span>m<span class="cupd">e</span>U<span class="cupd">nit</span>.MILLISECONDS</span>);
+      }</span>
+      <span class="marker" id="mapping-29"></span><span class="token mv" id="move-src-27" data-title="Block/IfStatement">if (<span class="marker" id="mapping-30"></span><span class="token del" data-title="InfixExpression/QualifiedName">expiration.expireAfterWriteMillis</span> != null) {
+        builder.<span class="marker" id="mapping-31"></span><span class="token upd" id="move-src-28" data-title="MethodInvocation/SimpleName"><span class="cupd">e</span>xpi<span class="cupd">re</span>Af<span class="cupd">ter</span>Write</span>(<span class="marker" id="mapping-32"></span><span class="token upd" id="move-src-29" data-title="MethodInvocation/QualifiedName"><span class="cupd">e</span>xpi<span class="cupd">r</span><span class="cupd">ation</span>.expireAfterWriteMillis</span>, <span class="marker" id="mapping-33"></span><span class="token upd" id="move-src-30" data-title="MethodInvocation/QualifiedName">Tim<span class="cupd">e</span>U<span class="cupd">nit</span>.MILLISECONDS</span>);
+      }</span>
+    }</span>
+    if (keyStrength != null) {
+      builder.setKeyStrength(keyStrength);
+    }
+    if (valueStrength != null) {
+      builder.setValueStrength(valueStrength);
+    }
+    return builder;
+  }
+
+  static class <span class="marker" id="mapping-34"></span><span class="token upd" id="move-src-31" data-title="TypeDeclaration/SimpleName">Expi<span class="cupd">rationSpec</span></span> {
+    <span class="marker" id="mapping-35"></span><span class="token del" data-title="FieldDeclaration/MarkerAnnotation">@Nullable</span>
+    private final <span class="marker" id="mapping-36"></span><span class="token del" data-title="FieldDeclaration/SimpleType">Long</span> <span class="marker" id="mapping-37"></span><span class="token upd" id="move-src-32" data-title="VariableDeclarationFragment/SimpleName">expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessMillis</span>;
+    <span class="marker" id="mapping-38"></span><span class="token del" data-title="FieldDeclaration/MarkerAnnotation">@Nullable</span>
+    private final <span class="marker" id="mapping-39"></span><span class="token upd" id="move-src-33" data-title="FieldDeclaration/SimpleType"><span class="marker" id="mapping-40"></span><span class="token upd" id="move-src-34" data-title="SimpleType/SimpleName">Long</span></span> <span class="marker" id="mapping-41"></span><span class="token upd" id="move-src-35" data-title="VariableDeclarationFragment/SimpleName">exp<span class="cupd">i</span>reAfterWriteMillis</span>;
+
+    private <span class="marker" id="mapping-42"></span><span class="token upd" id="move-src-36" data-title="MethodDeclaration/SimpleName">Expi<span class="cupd">rationSpec</span></span>(<span class="marker" id="mapping-43"></span><span class="token del" data-title="SingleVariableDeclaration/SimpleType">Long</span> <span class="marker" id="mapping-44"></span><span class="token del" data-title="SingleVariableDeclaration/SimpleName">expireAfterAccessMillis</span>, <span class="marker" id="mapping-45"></span><span class="token del" data-title="MethodDeclaration/SingleVariableDeclaration">Long expireAfterWriteMillis</span>) {
+      <span class="marker" id="mapping-46"></span><span class="token del" data-title="Block/ExpressionStatement">Preconditions.checkArgument(
+          expireAfterAccessMillis == null || expireAfterWriteMillis == null);</span>
+      this.<span class="marker" id="mapping-47"></span><span class="token upd" id="move-src-37" data-title="FieldAccess/SimpleName">expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessMillis</span> = <span class="marker" id="mapping-48"></span><span class="token upd" id="move-src-38" data-title="Assignment/SimpleName">expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessMillis</span>;
+      this.<span class="marker" id="mapping-49"></span><span class="token upd" id="move-src-39" data-title="FieldAccess/SimpleName">exp<span class="cupd">i</span>reAfterWriteMillis</span> = <span class="marker" id="mapping-50"></span><span class="token upd" id="move-src-40" data-title="Assignment/SimpleName">exp<span class="cupd">i</span>reAfterWriteMillis</span>;
+    }
+
+    public static <span class="marker" id="mapping-51"></span><span class="token upd" id="move-src-41" data-title="MethodDeclaration/SimpleType"><span class="marker" id="mapping-52"></span><span class="token upd" id="move-src-42" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> <span class="marker" id="mapping-53"></span><span class="token upd" id="move-src-43" data-title="MethodDeclaration/SimpleName">afterAccess</span>(long <span class="marker" id="mapping-54"></span><span class="token upd" id="move-src-44" data-title="SingleVariableDeclaration/SimpleName"><span class="cupd">a</span>fterAccess</span>, <span class="marker" id="mapping-55"></span><span class="token mv" id="move-src-45" data-title="MethodDeclaration/SingleVariableDeclaration">TimeUnit unit</span>) {
+      return new <span class="marker" id="mapping-56"></span><span class="token upd" id="move-src-46" data-title="ClassInstanceCreation/SimpleType"><span class="marker" id="mapping-57"></span><span class="token upd" id="move-src-47" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>(<span class="marker" id="mapping-58"></span><span class="token del" data-title="ClassInstanceCreation/MethodInvocation">unit.toMillis(afterAccess)</span>, <span class="marker" id="mapping-59"></span><span class="token del" data-title="ClassInstanceCreation/NullLiteral">null</span>);
+    }
+
+    <span class="marker" id="mapping-60"></span><span class="token del" data-title="TypeDeclaration/MethodDeclaration">public static ExpirationSpec afterWrite(long afterWrite, <span class="marker" id="mapping-61"></span><span class="token mv" id="move-src-48" data-title="MethodDeclaration/SingleVariableDeclaration">TimeUnit unit</span>) {
+      return new ExpirationSpec(null, unit.toMillis(afterWrite));
+    }</span>
+
+    @Override
+    public int hashCode() {
+      return Objects.hashCode(<span class="marker" id="mapping-62"></span><span class="token upd" id="move-src-49" data-title="MethodInvocation/SimpleName">expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessMillis</span>, <span class="marker" id="mapping-63"></span><span class="token upd" id="move-src-50" data-title="MethodInvocation/SimpleName">exp<span class="cupd">i</span>reAfterWriteMillis</span>);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o instanceof <span class="marker" id="mapping-64"></span><span class="token upd" id="move-src-51" data-title="InstanceofExpression/SimpleType"><span class="marker" id="mapping-65"></span><span class="token upd" id="move-src-52" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) {
+        <span class="marker" id="mapping-66"></span><span class="token upd" id="move-src-53" data-title="VariableDeclarationStatement/SimpleType"><span class="marker" id="mapping-67"></span><span class="token upd" id="move-src-54" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> that = (<span class="marker" id="mapping-68"></span><span class="token upd" id="move-src-55" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-69"></span><span class="token upd" id="move-src-56" data-title="SimpleType/SimpleName">Expi<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) o;
+        return <span class="marker" id="mapping-70"></span><span class="token upd" id="move-src-57" data-title="ReturnStatement/InfixExpression"><span class="marker" id="mapping-71"></span><span class="token upd" id="move-src-58" data-title="MethodInvocation/SimpleName">Objects</span>.<span class="marker" id="mapping-72"></span><span class="token upd" id="move-src-59" data-title="MethodInvocation/SimpleName">equal</span>(<span class="marker" id="mapping-73"></span><span class="token del" data-title="MethodInvocation/FieldAccess">this.expireAfterAccessMillis</span>, <span class="marker" id="mapping-74"></span><span class="token del" data-title="MethodInvocation/QualifiedName">that.expireAfterAccessMillis</span>)
+            &amp;&amp; <span class="marker" id="mapping-75"></span><span class="token upd" id="move-src-60" data-title="MethodInvocation/SimpleName">Objec<span class="cupd">t</span>s</span>.<span class="marker" id="mapping-76"></span><span class="token del" data-title="MethodInvocation/SimpleName">equal</span>(<span class="marker" id="mapping-77"></span><span class="token del" data-title="MethodInvocation/FieldAccess">this.expireAfterWriteMillis</span>, <span class="marker" id="mapping-78"></span><span class="token upd" id="move-src-61" data-title="MethodInvocation/QualifiedName"><span class="cupd">that.</span>expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erWriteMillis</span>)</span>;
+      }
+      return false;
+    }
+
+    @Override
+    public String toString() {
+      return Objects.toStringHelper(this)
+          .add(<span class="marker" id="mapping-79"></span><span class="token upd" id="move-src-62" data-title="MethodInvocation/StringLiteral"><span class="cupd">"</span>expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessM<span class="cupd">i</span>llis"</span>, <span class="marker" id="mapping-80"></span><span class="token upd" id="move-src-63" data-title="MethodInvocation/SimpleName">expi<span class="cupd">r</span>eAf<span class="cupd">t</span>erAccessMillis</span>)
+          .add(<span class="marker" id="mapping-81"></span><span class="token upd" id="move-src-64" data-title="MethodInvocation/StringLiteral"><span class="cupd">"</span>exp<span class="cupd">i</span>reAf<span class="cupd">t</span>erWriteMillis"</span>, <span class="marker" id="mapping-82"></span><span class="token upd" id="move-src-65" data-title="MethodInvocation/SimpleName">exp<span class="cupd">i</span>reAfterWriteMillis</span>)
+          .toString();
+    }
+  }
+}
+</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">package com.google.common.cache;
+
+import com.google.common.base.Function;
+import com.google.common.base.Objects;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.cache.LocalCache.Strength;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nullable;
+
+class CacheBuilderFactory {
+  private Set&lt;Integer&gt; concurrencyLevels = Sets.newHashSet((Integer) null);
+  private Set&lt;Integer&gt; initialCapacities = Sets.newHashSet((Integer) null);
+  private Set&lt;Integer&gt; maximumSizes = Sets.newHashSet((Integer) null);
+  private <span class="marker" id="mapping-83"></span><span class="token upd" id="move-dst-1" data-title="FieldDeclaration/ParameterizedType"><span class="cupd">Set&lt;</span><span class="marker" id="mapping-84"></span><span class="token upd" id="move-dst-2" data-title="ParameterizedType/SimpleType"><span class="marker" id="mapping-85"></span><span class="token upd" id="move-dst-3" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd"><span class="cupd">rationSpec</span></span></span></span>&gt;</span></span> <span class="marker" id="mapping-86"></span><span class="token upd" id="move-dst-4" data-title="VariableDeclarationFragment/SimpleName"><span class="cupd">expir</span>eAf<span class="cupd">t</span>erWr<span class="cupd">i</span>tes</span> = Sets.newHashSet((<span class="marker" id="mapping-87"></span><span class="token upd" id="move-dst-5" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-88"></span><span class="token upd" id="move-dst-6" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) null);
+  <span class="marker" id="mapping-89"></span><span class="token add" data-title="TypeDeclaration/FieldDeclaration">private Set&lt;DurationSpec&gt; expireAfterAccesses = Sets.newHashSet((DurationSpec) null);</span>
+  <span class="marker" id="mapping-90"></span><span class="token add" data-title="TypeDeclaration/FieldDeclaration">private Set&lt;DurationSpec&gt; refreshes = Sets.newHashSet((DurationSpec) null);</span>
+  private Set&lt;Strength&gt; keyStrengths = Sets.newHashSet((Strength) null);
+  private Set&lt;Strength&gt; valueStrengths = Sets.newHashSet((Strength) null);
+
+  CacheBuilderFactory withConcurrencyLevels(Set&lt;Integer&gt; concurrencyLevels) {
+    this.concurrencyLevels = Sets.newLinkedHashSet(concurrencyLevels);
+    return this;
+  }
+
+  CacheBuilderFactory withInitialCapacities(Set&lt;Integer&gt; initialCapacities) {
+    this.initialCapacities = Sets.newLinkedHashSet(initialCapacities);
+    return this;
+  }
+
+  CacheBuilderFactory withMaximumSizes(Set&lt;Integer&gt; maximumSizes) {
+    this.maximumSizes = Sets.newLinkedHashSet(maximumSizes);
+    return this;
+  }
+
+  CacheBuilderFactory <span class="marker" id="mapping-91"></span><span class="token upd" id="move-dst-7" data-title="MethodDeclaration/SimpleName"><span class="cupd">withExpir</span>eAf<span class="cupd">t</span>erWr<span class="cupd">i</span>tes</span>(<span class="marker" id="mapping-92"></span><span class="token upd" id="move-dst-8" data-title="SingleVariableDeclaration/ParameterizedType"><span class="cupd">Set&lt;</span><span class="marker" id="mapping-93"></span><span class="token upd" id="move-dst-9" data-title="ParameterizedType/SimpleType"><span class="marker" id="mapping-94"></span><span class="token upd" id="move-dst-10" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd"><span class="cupd">rationSpec</span></span></span></span>&gt;</span></span> <span class="marker" id="mapping-95"></span><span class="token upd" id="move-dst-11" data-title="SingleVariableDeclaration/SimpleName">du<span class="cupd">rations</span></span>) {
+    this.<span class="marker" id="mapping-96"></span><span class="token upd" id="move-dst-12" data-title="FieldAccess/SimpleName"><span class="cupd">expir</span>eAf<span class="cupd">t</span>erWr<span class="cupd">i</span>tes</span> = Sets.newLinkedHashSet(<span class="marker" id="mapping-97"></span><span class="token upd" id="move-dst-13" data-title="MethodInvocation/SimpleName">du<span class="cupd">rations</span></span>);
+    return this;
+  }
+
+  <span class="marker" id="mapping-98"></span><span class="token add" data-title="TypeDeclaration/MethodDeclaration">CacheBuilderFactory withExpireAfterAccesses(Set&lt;DurationSpec&gt; durations) {
+    this.expireAfterAccesses = Sets.newLinkedHashSet(durations);
+    return this;
+  }</span>
+
+  <span class="marker" id="mapping-99"></span><span class="token add" data-title="TypeDeclaration/MethodDeclaration">CacheBuilderFactory withRefreshes(Set&lt;DurationSpec&gt; durations) {
+    this.refreshes = Sets.newLinkedHashSet(durations);
+    return this;
+  }</span>
+
+  CacheBuilderFactory withKeyStrengths(Set&lt;Strength&gt; keyStrengths) {
+    this.keyStrengths = Sets.newLinkedHashSet(keyStrengths);
+    Preconditions.checkArgument(!this.keyStrengths.contains(Strength.SOFT));
+    return this;
+  }
+
+  CacheBuilderFactory withValueStrengths(Set&lt;Strength&gt; valueStrengths) {
+    this.valueStrengths = Sets.newLinkedHashSet(valueStrengths);
+    return this;
+  }
+
+  Iterable&lt;CacheBuilder&lt;Object, Object&gt;&gt; buildAllPermutations() {
+    @SuppressWarnings("unchecked")
+    Iterable&lt;List&lt;Object&gt;&gt; combinations = buildCartesianProduct(concurrencyLevels,
+        initialCapacities, maximumSizes, <span class="marker" id="mapping-100"></span><span class="token upd" id="move-dst-14" data-title="MethodInvocation/SimpleName"><span class="cupd">expir</span>eAf<span class="cupd">t</span>erWr<span class="cupd">i</span>tes</span>, <span class="marker" id="mapping-101"></span><span class="token add" data-title="MethodInvocation/SimpleName">expireAfterAccesses</span>, <span class="marker" id="mapping-102"></span><span class="token add" data-title="MethodInvocation/SimpleName">refreshes</span>,
+        keyStrengths, valueStrengths);
+    return Iterables.transform(combinations,
+        new Function&lt;List&lt;Object&gt;, CacheBuilder&lt;Object, Object&gt;&gt;() {
+          @Override public CacheBuilder&lt;Object, Object&gt; apply(List&lt;Object&gt; combination) {
+            return createCacheBuilder(
+                (Integer) combination.get(0),
+                (Integer) combination.get(1),
+                (Integer) combination.get(2),
+                (<span class="marker" id="mapping-103"></span><span class="token upd" id="move-dst-15" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-104"></span><span class="token upd" id="move-dst-16" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) combination.get(3),
+                <span class="marker" id="mapping-105"></span><span class="token add" data-title="MethodInvocation/CastExpression">(DurationSpec) combination.get(4)</span>,
+                <span class="marker" id="mapping-106"></span><span class="token add" data-title="MethodInvocation/CastExpression">(DurationSpec) combination.get(5)</span>,
+                (Strength) combination.get(<span class="marker" id="mapping-107"></span><span class="token upd" id="move-dst-17" data-title="MethodInvocation/NumberLiteral">6</span>),
+                (Strength) combination.get(<span class="marker" id="mapping-108"></span><span class="token upd" id="move-dst-18" data-title="MethodInvocation/NumberLiteral">7</span>));
+          }
+        });
+  }
+
+  private static final Function&lt;Object, Optional&lt;?&gt;&gt; NULLABLE_TO_OPTIONAL =
+      new Function&lt;Object, Optional&lt;?&gt;&gt;() {
+        @Override public Optional&lt;?&gt; apply(@Nullable Object obj) {
+          return Optional.fromNullable(obj);
+        }
+      };
+
+  private static final Function&lt;Optional&lt;?&gt;, Object&gt; OPTIONAL_TO_NULLABLE =
+      new Function&lt;Optional&lt;?&gt;, Object&gt;() {
+        @Override public Object apply(Optional&lt;?&gt; optional) {
+          return optional.orNull();
+        }
+      };
+
+  private Iterable&lt;List&lt;Object&gt;&gt; buildCartesianProduct(Set&lt;?&gt;... sets) {
+    List&lt;Set&lt;Optional&lt;?&gt;&gt;&gt; optionalSets = Lists.newArrayListWithExpectedSize(sets.length);
+    for (Set&lt;?&gt; set : sets) {
+      Set&lt;Optional&lt;?&gt;&gt; optionalSet =
+          Sets.newLinkedHashSet(Iterables.transform(set, NULLABLE_TO_OPTIONAL));
+      optionalSets.add(optionalSet);
+    }
+    Set&lt;List&lt;Optional&lt;?&gt;&gt;&gt; cartesianProduct = Sets.cartesianProduct(optionalSets);
+    return Iterables.transform(cartesianProduct,
+        new Function&lt;List&lt;Optional&lt;?&gt;&gt;, List&lt;Object&gt;&gt;() {
+          @Override public List&lt;Object&gt; apply(List&lt;Optional&lt;?&gt;&gt; objs) {
+            return Lists.transform(objs, OPTIONAL_TO_NULLABLE);
+          }
+        });
+  }
+
+  private CacheBuilder&lt;Object, Object&gt; createCacheBuilder(
+      Integer concurrencyLevel, Integer initialCapacity, Integer maximumSize,
+      <span class="marker" id="mapping-109"></span><span class="token upd" id="move-dst-19" data-title="SingleVariableDeclaration/SimpleType"><span class="marker" id="mapping-110"></span><span class="token upd" id="move-dst-20" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> <span class="marker" id="mapping-111"></span><span class="token upd" id="move-dst-21" data-title="SingleVariableDeclaration/SimpleName"><span class="cupd">expir</span>eAf<span class="cupd">t</span>erWrite</span>, <span class="marker" id="mapping-112"></span><span class="token add" data-title="MethodDeclaration/SingleVariableDeclaration">DurationSpec expireAfterAccess</span>, <span class="marker" id="mapping-113"></span><span class="token add" data-title="MethodDeclaration/SingleVariableDeclaration">DurationSpec refresh</span>,
+      Strength keyStrength, Strength valueStrength) {
+
+    CacheBuilder&lt;Object, Object&gt; builder = CacheBuilder.newBuilder();
+    if (concurrencyLevel != null) {
+      builder.concurrencyLevel(concurrencyLevel);
+    }
+    if (initialCapacity != null) {
+      builder.initialCapacity(initialCapacity);
+    }
+    if (maximumSize != null) {
+      builder.maximumSize(maximumSize);
+    }
+    <span class="marker" id="mapping-114"></span><span class="token add" data-title="Block/IfStatement">if (<span class="marker" id="mapping-115"></span><span class="token mv" id="move-dst-22" data-title="IfStatement/InfixExpression"><span class="marker" id="mapping-116"></span><span class="token upd" id="move-dst-23" data-title="InfixExpression/SimpleName"><span class="cupd">expir</span>eAf<span class="cupd">t</span>erWrite</span> != null</span>) {
+      builder.expireAfterWrite(expireAfterWrite.duration, expireAfterWrite.unit);
+    }</span>
+    <span class="marker" id="mapping-117"></span><span class="token mv" id="move-dst-24" data-title="Block/IfStatement">if (<span class="marker" id="mapping-118"></span><span class="token add" data-title="InfixExpression/SimpleName">expireAfterAccess</span> != null) {
+      builder.expireAfterAccess(<span class="marker" id="mapping-119"></span><span class="token upd" id="move-dst-25" data-title="MethodInvocation/QualifiedName"><span class="cupd">expir</span><span class="cupd">e</span><span class="cupd">AfterAccess</span>.duration</span>, <span class="marker" id="mapping-120"></span><span class="token upd" id="move-dst-26" data-title="MethodInvocation/QualifiedName">exp<span class="cupd">i</span>r<span class="cupd">e</span>AfterAccess.u<span class="cupd">nit</span></span>);
+    }</span>
+    <span class="marker" id="mapping-121"></span><span class="token mv" id="move-dst-27" data-title="Block/IfStatement">if (<span class="marker" id="mapping-122"></span><span class="token add" data-title="InfixExpression/SimpleName">refresh</span> != null) {
+      builder.<span class="marker" id="mapping-123"></span><span class="token upd" id="move-dst-28" data-title="MethodInvocation/SimpleName">r<span class="cupd">e</span>f<span class="cupd">re</span>shIn<span class="cupd">ter</span>val</span>(<span class="marker" id="mapping-124"></span><span class="token upd" id="move-dst-29" data-title="MethodInvocation/QualifiedName">r<span class="cupd">e</span>f<span class="cupd">r</span>esh.dur<span class="cupd">ation</span></span>, <span class="marker" id="mapping-125"></span><span class="token upd" id="move-dst-30" data-title="MethodInvocation/QualifiedName">r<span class="cupd">e</span>fresh.u<span class="cupd">nit</span></span>);
+    }</span>
+    if (keyStrength != null) {
+      builder.setKeyStrength(keyStrength);
+    }
+    if (valueStrength != null) {
+      builder.setValueStrength(valueStrength);
+    }
+    return builder;
+  }
+
+  static class <span class="marker" id="mapping-126"></span><span class="token upd" id="move-dst-31" data-title="TypeDeclaration/SimpleName">Du<span class="cupd">rationSpec</span></span> {
+    private final <span class="marker" id="mapping-127"></span><span class="token add" data-title="FieldDeclaration/PrimitiveType">long</span> <span class="marker" id="mapping-128"></span><span class="token upd" id="move-dst-32" data-title="VariableDeclarationFragment/SimpleName">du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span>;
+    private final <span class="marker" id="mapping-129"></span><span class="token upd" id="move-dst-33" data-title="FieldDeclaration/SimpleType"><span class="marker" id="mapping-130"></span><span class="token upd" id="move-dst-34" data-title="SimpleType/SimpleName">TimeUnit</span></span> <span class="marker" id="mapping-131"></span><span class="token upd" id="move-dst-35" data-title="VariableDeclarationFragment/SimpleName">un<span class="cupd">i</span>t</span>;
+
+    private <span class="marker" id="mapping-132"></span><span class="token upd" id="move-dst-36" data-title="MethodDeclaration/SimpleName">Du<span class="cupd">rationSpec</span></span>(<span class="marker" id="mapping-133"></span><span class="token add" data-title="SingleVariableDeclaration/PrimitiveType">long</span> <span class="marker" id="mapping-134"></span><span class="token add" data-title="SingleVariableDeclaration/SimpleName">duration</span>, <span class="marker" id="mapping-135"></span><span class="token mv" id="move-dst-45" data-title="MethodDeclaration/SingleVariableDeclaration">TimeUnit unit</span>) {
+      this.<span class="marker" id="mapping-136"></span><span class="token upd" id="move-dst-37" data-title="FieldAccess/SimpleName">du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span> = <span class="marker" id="mapping-137"></span><span class="token upd" id="move-dst-38" data-title="Assignment/SimpleName">du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span>;
+      this.<span class="marker" id="mapping-138"></span><span class="token upd" id="move-dst-39" data-title="FieldAccess/SimpleName">un<span class="cupd">i</span>t</span> = <span class="marker" id="mapping-139"></span><span class="token upd" id="move-dst-40" data-title="Assignment/SimpleName">un<span class="cupd">i</span>t</span>;
+    }
+
+    public static <span class="marker" id="mapping-140"></span><span class="token upd" id="move-dst-41" data-title="MethodDeclaration/SimpleType"><span class="marker" id="mapping-141"></span><span class="token upd" id="move-dst-42" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> <span class="marker" id="mapping-142"></span><span class="token upd" id="move-dst-43" data-title="MethodDeclaration/SimpleName">of</span>(long <span class="marker" id="mapping-143"></span><span class="token upd" id="move-dst-44" data-title="SingleVariableDeclaration/SimpleName">dur<span class="cupd">a</span>tion</span>, <span class="marker" id="mapping-144"></span><span class="token mv" id="move-dst-48" data-title="MethodDeclaration/SingleVariableDeclaration">TimeUnit unit</span>) {
+      return new <span class="marker" id="mapping-145"></span><span class="token upd" id="move-dst-46" data-title="ClassInstanceCreation/SimpleType"><span class="marker" id="mapping-146"></span><span class="token upd" id="move-dst-47" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>(<span class="marker" id="mapping-147"></span><span class="token add" data-title="ClassInstanceCreation/SimpleName">duration</span>, <span class="marker" id="mapping-148"></span><span class="token add" data-title="ClassInstanceCreation/SimpleName">unit</span>);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hashCode(<span class="marker" id="mapping-149"></span><span class="token upd" id="move-dst-49" data-title="MethodInvocation/SimpleName">du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span>, <span class="marker" id="mapping-150"></span><span class="token upd" id="move-dst-50" data-title="MethodInvocation/SimpleName">un<span class="cupd">i</span>t</span>);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o instanceof <span class="marker" id="mapping-151"></span><span class="token upd" id="move-dst-51" data-title="InstanceofExpression/SimpleType"><span class="marker" id="mapping-152"></span><span class="token upd" id="move-dst-52" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) {
+        <span class="marker" id="mapping-153"></span><span class="token upd" id="move-dst-53" data-title="VariableDeclarationStatement/SimpleType"><span class="marker" id="mapping-154"></span><span class="token upd" id="move-dst-54" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span> that = (<span class="marker" id="mapping-155"></span><span class="token upd" id="move-dst-55" data-title="CastExpression/SimpleType"><span class="marker" id="mapping-156"></span><span class="token upd" id="move-dst-56" data-title="SimpleType/SimpleName">Du<span class="cupd"><span class="cupd">rationSpec</span></span></span></span>) o;
+        return <span class="marker" id="mapping-157"></span><span class="token upd" id="move-dst-57" data-title="ReturnStatement/InfixExpression"><span class="marker" id="mapping-158"></span><span class="token upd" id="move-dst-58" data-title="MethodInvocation/SimpleName">unit</span>.<span class="marker" id="mapping-159"></span><span class="token upd" id="move-dst-59" data-title="MethodInvocation/SimpleName">toNanos</span>(<span class="marker" id="mapping-160"></span><span class="token add" data-title="MethodInvocation/SimpleName">duration</span>) == <span class="marker" id="mapping-161"></span><span class="token add" data-title="MethodInvocation/QualifiedName">that.unit</span>.<span class="marker" id="mapping-162"></span><span class="token upd" id="move-dst-60" data-title="MethodInvocation/SimpleName"><span class="cupd">t</span>oNanos</span>(<span class="marker" id="mapping-163"></span><span class="token upd" id="move-dst-61" data-title="MethodInvocation/QualifiedName"><span class="cupd">that.</span>du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span>)</span>;
+      }
+      return false;
+    }
+
+    @Override
+    public String toString() {
+      return Objects.toStringHelper(this)
+          .add(<span class="marker" id="mapping-164"></span><span class="token upd" id="move-dst-62" data-title="MethodInvocation/StringLiteral"><span class="cupd">"</span>du<span class="cupd">r</span>a<span class="cupd">t</span><span class="cupd">i</span>on"</span>, <span class="marker" id="mapping-165"></span><span class="token upd" id="move-dst-63" data-title="MethodInvocation/SimpleName">du<span class="cupd">r</span>a<span class="cupd">t</span>ion</span>)
+          .add(<span class="marker" id="mapping-166"></span><span class="token upd" id="move-dst-64" data-title="MethodInvocation/StringLiteral"><span class="cupd">"</span>un<span class="cupd">i</span><span class="cupd">t</span>"</span>, <span class="marker" id="mapping-167"></span><span class="token upd" id="move-dst-65" data-title="MethodInvocation/SimpleName">un<span class="cupd">i</span>t</span>)
+          .toString();
+    }
+  }
+}
+</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>
