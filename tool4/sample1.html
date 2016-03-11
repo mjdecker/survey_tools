@@ -21,7 +21,8 @@ public void testGeoHashValue() throws Exception {
     assertThat(doc.rootDoc().getField("point.lon"), notNullValue());
     assertThat(doc.rootDoc().get("point.geohash"),
         equalTo(GeoHashUtils.encode(1.2, 1.3)));
-}</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">@Test
+}
+</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">@Test
 public void testGeoHashValue() throws Exception {
     String mapping = XContentFactory.jsonBuilder()
             .startObject().startObject("type")
@@ -44,4 +45,5 @@ public void testGeoHashValue() throws Exception {
     assertThat(doc.rootDoc().getField("point.lon"), notNullValue());
     assertThat(doc.rootDoc().get("point.geohash"),
         equalTo(GeoHashUtils.encode(1.2, 1.3)));
-}</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>
+}
+</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>
