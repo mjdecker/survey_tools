@@ -1,35 +1,26 @@
-static class ExpirationSpec {
-  @Nullable
-  private final Long expireAfterAccessMillis;
-  @Nullable
-  private final Long expireAfterWriteMillis;
+static class DurationSpec {
+  private final long duration;
+  private final TimeUnit unit;
 
-  private ExpirationSpec(Long expireAfterAccessMillis, Long expireAfterWriteMillis) {
-    Preconditions.checkArgument(
-        expireAfterAccessMillis == null || expireAfterWriteMillis == null);
-    this.expireAfterAccessMillis = expireAfterAccessMillis;
-    this.expireAfterWriteMillis = expireAfterWriteMillis;
+  private DurationSpec(long duration, TimeUnit unit) {
+    this.duration = duration;
+    this.unit = unit;
   }
 
-  public static ExpirationSpec afterAccess(long afterAccess, TimeUnit unit) {
-    return new ExpirationSpec(unit.toMillis(afterAccess), null);
-  }
-
-  public static ExpirationSpec afterWrite(long afterWrite, TimeUnit unit) {
-    return new ExpirationSpec(null, unit.toMillis(afterWrite));
+  public static DurationSpec of(long duration, TimeUnit unit) {
+    return new DurationSpec(duration, unit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(expireAfterAccessMillis, expireAfterWriteMillis);
+    return Objects.hashCode(duration, unit);
   }
 
   @Override
   public boolean equals(Object o) {
-    if (o instanceof ExpirationSpec) {
-      ExpirationSpec that = (ExpirationSpec) o;
-      return Objects.equal(this.expireAfterAccessMillis, that.expireAfterAccessMillis)
-          && Objects.equal(this.expireAfterWriteMillis, that.expireAfterWriteMillis);
+    if (o instanceof DurationSpec) {
+      DurationSpec that = (DurationSpec) o;
+      return unit.toNanos(duration) == that.unit.toNanos(that.duration);
     }
     return false;
   }
@@ -37,8 +28,8 @@ static class ExpirationSpec {
   @Override
   public String toString() {
     return Objects.toStringHelper(this)
-        .add("expireAfterAccessMillis", expireAfterAccessMillis)
-        .add("expireAfterWriteMillis", expireAfterWriteMillis)
+        .add("duration", duration)
+        .add("unit", unit)
         .toString();
   }
 }
