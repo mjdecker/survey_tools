@@ -1,11 +1,5 @@
 void physDown(int amount, int screenAmount)
 {
-  if(Debug.SCROLL_DEBUG)
-  {
-    Log.log(Log.DEBUG,this,"physDown() start: "
-      + physicalLine + ":" + scrollLine);
-  }
-
   skew = 0;
 
   if(!isLineVisible(physicalLine))
@@ -38,14 +32,11 @@ void physDown(int amount, int screenAmount)
     }
   }
 
-  if(Debug.SCROLL_DEBUG)
+  if(screenAmount != 0)
   {
-    Log.log(Log.DEBUG,this,"physDown() end: "
-      + physicalLine + ":" + scrollLine);
+    if(screenAmount < 0)
+      scrollUp(-screenAmount);
+    else
+      scrollDown(screenAmount);
   }
-
-  if(screenAmount < 0)
-    scrollUp(-screenAmount);
-  else if(screenAmount > 0)
-    scrollDown(screenAmount);
 }
