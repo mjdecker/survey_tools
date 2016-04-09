@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Tool4</title><link type="text/css" href="res/web/bootstrap.min.css" rel="stylesheet"/><link type="text/css" href="res/web/gumtree.css" rel="stylesheet"/></head><body><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="btn-toolbar pull-right"><div class="btn-group"><a class="btn btn-default btn-xs" id="legend" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<span class=&quot;del&quot;>&nbsp;&nbsp;</span> deleted<br><span class=&quot;add&quot;>&nbsp;&nbsp;</span> added<br><span class=&quot;mv&quot;>&nbsp;&nbsp;</span> moved<br><span class=&quot;upd&quot;>&nbsp;&nbsp;</span> updated<br>" data-original-title="Legend" title="Legend" role="button">Legend</a><a class="btn btn-default btn-xs" id="shortcuts" href="#" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<b>n</b> next<br><b>t</b> top<br><b>b</b> bottom" data-original-title="Shortcuts" title="Shortcuts" role="button">Shortcuts</a></div><div class="btn-group"></div></div></div></div><div class="row"><div class="col-lg-6 max-height"><h5>original.java</h5><pre class="pre max-height">@Before
+public void setup() throws Exception {
+    super.setUp();
+
+    
+    strMapper = new StringFieldMapper.Builder("str_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    lngMapper = new LongFieldMapper.Builder("lng_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    dblMapper = new DoubleFieldMapper.Builder("dbl_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    
+    <span class="marker" id="mapping-1"></span><span class="token upd" id="move-src-1" data-title="VariableDeclarationStatement/SimpleType"><span class="marker" id="mapping-2"></span><span class="token upd" id="move-src-2" data-title="SimpleType/SimpleName">Index</span></span> <span class="marker" id="mapping-3"></span><span class="token upd" id="move-src-3" data-title="VariableDeclarationFragment/SimpleName"><span class="cupd">in</span>dex</span> = <span class="marker" id="mapping-4"></span><span class="token del" data-title="VariableDeclarationFragment/ClassInstanceCreation">new Index("test")</span>;
+    <span class="marker" id="mapping-5"></span><span class="token del" data-title="Block/VariableDeclarationStatement">CircuitBreakerService circuitBreakerService = new NoneCircuitBreakerService();</span>
+    <span class="marker" id="mapping-6"></span><span class="token upd" id="move-src-4" data-title="VariableDeclarationStatement/SimpleType"><span class="cupd"><span class="marker" id="mapping-7"></span><span class="token upd" id="move-src-5" data-title="SimpleType/SimpleName"><span class="cupd">Ind</span></span>ic<span class="cupd"><span class="cupd">e</span></span>sF<span class="cupd"><span class="cupd">i</span></span>eldDataCa<span class="cupd"><span class="cupd">c</span></span>he</span></span> <span class="marker" id="mapping-8"></span><span class="token upd" id="move-src-6" data-title="VariableDeclarationFragment/SimpleName"><span class="cupd">ind</span>ic<span class="cupd">e</span>sF<span class="cupd">i</span>eldDataCa<span class="cupd">c</span>he</span> = <span class="marker" id="mapping-9"></span><span class="token del" data-title="VariableDeclarationFragment/ClassInstanceCreation">new IndicesFieldDataCache(
+            ImmutableSettings.Builder.EMPTY_SETTINGS,
+            new IndicesFieldDataCacheListener(circuitBreakerService)
+    )</span>;
+    ifdService = <span class="marker" id="mapping-10"></span><span class="token del" data-title="Assignment/ClassInstanceCreation">new IndexFieldDataService(index, <span class="marker" id="mapping-11"></span><span class="token mv" id="move-src-7" data-title="ClassInstanceCreation/MethodInvocation">ImmutableSettings.builder().put("index.fielddata.cache", "none").build()</span>, indicesFieldDataCache, circuitBreakerService, new <span class="marker" id="mapping-12"></span><span class="token mv" id="move-src-8" data-title="SimpleType/SimpleName"><span class="marker" id="mapping-13"></span><span class="token upd" id="move-src-9" data-title="SimpleType/SimpleName"><span class="cupd">Ind</span>ic<span class="cupd">e</span>s<span class="cupd">FieldData</span>Cach<span class="cupd">e</span>L<span class="cupd">i</span>stener</span></span>(circuitBreakerService))</span>;
+    <span class="marker" id="mapping-14"></span><span class="token del" data-title="Block/VariableDeclarationStatement">MapperService mapperService = MapperTestUtils.newMapperService(ifdService.index(), ImmutableSettings.Builder.EMPTY_SETTINGS);</span>
+    <span class="marker" id="mapping-15"></span><span class="token del" data-title="Block/ExpressionStatement">ifdService.setIndexService(new StubIndexService(mapperService));</span>
+    IndexQueryParserService parserService = <span class="marker" id="mapping-16"></span><span class="token del" data-title="VariableDeclarationFragment/ClassInstanceCreation">new IndexQueryParserService(
+            index, ImmutableSettings.EMPTY, new IndicesQueriesRegistry(ImmutableSettings.EMPTY, <span class="marker" id="mapping-17"></span><span class="token mv" id="move-src-10" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-18"></span><span class="token upd" id="move-src-11" data-title="MethodInvocation/SimpleName">Immutabl<span class="cupd">e</span><span class="cupd">Se</span>t</span></span>.&lt;QueryParser&gt;of(), ImmutableSet.&lt;FilterParser&gt;of()),
+            null, null, null, mapperService, null, ifdService, null, null, null, null
+    )</span>;
+    parseContext = new QueryParseContext(<span class="marker" id="mapping-19"></span><span class="token del" data-title="ClassInstanceCreation/SimpleName">index</span>, parserService);
+    writer = new IndexWriter(new RAMDirectory(),
+            new IndexWriterConfig(Lucene.VERSION, new StandardAnalyzer(Lucene.VERSION)));
+
+    int numDocs = 10;
+    for (int i = 0; i &lt; numDocs; i++) {
+        Document d = new Document();
+        d.add(new StringField(strMapper.names().indexName(), "str" + i, Field.Store.NO));
+        d.add(new LongField(lngMapper.names().indexName(), i, Field.Store.NO));
+        d.add(new DoubleField(dblMapper.names().indexName(), Double.valueOf(i), Field.Store.NO));
+        writer.addDocument(d);
+    }
+
+    reader = SlowCompositeReaderWrapper.wrap(DirectoryReader.open(writer, true));
+}
+</pre></div><div class="col-lg-6 max-height"><h5>modified.java</h5><pre class="pre max-height">@Before
+public void setup() throws Exception {
+    super.setUp();
+
+    
+    strMapper = new StringFieldMapper.Builder("str_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    lngMapper = new LongFieldMapper.Builder("lng_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    dblMapper = new DoubleFieldMapper.Builder("dbl_value")
+            .build(new Mapper.BuilderContext(null, new ContentPath(1)));
+
+    
+    <span class="marker" id="mapping-20"></span><span class="token upd" id="move-dst-1" data-title="VariableDeclarationStatement/SimpleType"><span class="marker" id="mapping-21"></span><span class="token upd" id="move-dst-2" data-title="SimpleType/SimpleName">Settings</span></span> <span class="marker" id="mapping-22"></span><span class="token upd" id="move-dst-3" data-title="VariableDeclarationFragment/SimpleName">sett<span class="cupd">in</span>gs</span> = <span class="marker" id="mapping-23"></span><span class="token mv" id="move-dst-7" data-title="VariableDeclarationFragment/MethodInvocation">ImmutableSettings.builder().put("index.fielddata.cache", "none").build()</span>;
+    <span class="marker" id="mapping-24"></span><span class="token upd" id="move-dst-4" data-title="VariableDeclarationStatement/SimpleType"><span class="cupd"><span class="marker" id="mapping-25"></span><span class="token upd" id="move-dst-5" data-title="SimpleType/SimpleName"><span class="cupd">Ind</span></span><span class="cupd"><span class="cupd">e</span></span>xServ<span class="cupd"><span class="cupd">i</span></span><span class="cupd"><span class="cupd">c</span></span>e</span></span> <span class="marker" id="mapping-26"></span><span class="token upd" id="move-dst-6" data-title="VariableDeclarationFragment/SimpleName"><span class="cupd">ind</span><span class="cupd">e</span>xServ<span class="cupd">i</span><span class="cupd">c</span>e</span> = <span class="marker" id="mapping-27"></span><span class="token add" data-title="VariableDeclarationFragment/MethodInvocation">createIndex("test", settings)</span>;
+    ifdService = <span class="marker" id="mapping-28"></span><span class="token add" data-title="Assignment/MethodInvocation">indexService.injector().getInstance(<span class="marker" id="mapping-29"></span><span class="token mv" id="move-dst-9" data-title="SimpleType/SimpleName"><span class="marker" id="mapping-30"></span><span class="token upd" id="move-dst-9" data-title="SimpleType/SimpleName"><span class="cupd">Ind</span><span class="cupd">e</span>x<span class="cupd">FieldData</span>S<span class="cupd">e</span>rv<span class="cupd">i</span>ce</span></span>.class)</span>;
+    IndexQueryParserService parserService = <span class="marker" id="mapping-31"></span><span class="token add" data-title="VariableDeclarationFragment/MethodInvocation"><span class="marker" id="mapping-32"></span><span class="token mv" id="move-dst-11" data-title="MethodInvocation/SimpleName"><span class="marker" id="mapping-33"></span><span class="token upd" id="move-dst-11" data-title="MethodInvocation/SimpleName">ind<span class="cupd">e</span>x<span class="cupd">Se</span>rvice</span></span>.queryParserService()</span>;
+    parseContext = new QueryParseContext(<span class="marker" id="mapping-34"></span><span class="token add" data-title="ClassInstanceCreation/MethodInvocation">indexService.index()</span>, parserService);
+    writer = new IndexWriter(new RAMDirectory(),
+            new IndexWriterConfig(Lucene.VERSION, new StandardAnalyzer(Lucene.VERSION)));
+
+    int numDocs = 10;
+    for (int i = 0; i &lt; numDocs; i++) {
+        Document d = new Document();
+        d.add(new StringField(strMapper.names().indexName(), "str" + i, Field.Store.NO));
+        d.add(new LongField(lngMapper.names().indexName(), i, Field.Store.NO));
+        d.add(new DoubleField(dblMapper.names().indexName(), Double.valueOf(i), Field.Store.NO));
+        writer.addDocument(d);
+    }
+
+    reader = SlowCompositeReaderWrapper.wrap(DirectoryReader.open(writer, true));
+}
+</pre></div></div></div><script type="text/javascript" src="res/web/jquery.min.js"></script><script type="text/javascript" src="res/web/bootstrap.min.js"></script><script type="text/javascript" src="res/web/diff.js"></script></body></html>
