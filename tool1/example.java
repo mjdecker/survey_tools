@@ -1,4 +1,4 @@
-foo bar = get_foo();
-if(bar != null && !bar.empty())
+foo bar = foo();
+boolean is_empty = !(bar != null && !bar.empty());
+if(is_empty)
     bar.first().compute();
-bar = null;
