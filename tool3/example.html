@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>srcDiff</title>
+</head>
+<body style="font-family: courier, monospace; background-color: transparent; color: black;">
+<div><table style="border-collapse: collapse;"><tr><td style="border: 1px solid black;"><table><tr><th><strong>Original</strong></th></tr><tr><td><pre><span style="color: grey;">1 </span><span style="background-color: transparent;">foo bar = </span><span style="color: rgb(160, 160, 160); text-decoration: line-through;"><span style="color: black; background-color: rgb(255,187,187); font-weight: bold;">get_foo()</span></span><span style="background-color: transparent;">;</span><span style="background-color: transparent;">
+</span><span style="color: grey;">  </span><span style="background-color: transparent;">
+</span><span style="color: grey;">2 </span><span style="background-color: transparent;">if(</span><span style="color: rgb(160, 160, 160); text-decoration: line-through;"><span style="color: black; background-color: rgb(255,187,187); font-weight: bold;">bar != null &amp;&amp; !bar.empty()</span></span><span style="background-color: transparent;">)</span><span style="background-color: transparent;">
+</span><span style="color: grey;">3 </span><span style="background-color: transparent;">    bar.first().compute();</span><span style="background-color: transparent;">
+</span><span style="color: grey;">4 </span><span style="color: rgb(160, 160, 160); text-decoration: line-through;"><span style="color: black; background-color: rgb(255,187,187); font-weight: bold;">bar = null;</span></span><span style="background-color: transparent;">
+</span><span style="color: grey;">5 </span><span style="background-color: transparent;">
+</span></pre></td></tr></table></td><td style="border: 1px solid  black;"><table><tr><th><strong>Modified</strong></th></tr><tr><td><pre><span style="color: grey;">1 </span><span style="background-color: transparent;">foo bar = </span><span style="background-color: rgb(0 , 250, 108); font-weight: bold;">foo()</span><span style="background-color: transparent;">;</span><span style="background-color: transparent;">
+</span><span style="color: grey;">2 </span><span style="background-color: rgb(0 , 250, 108); font-weight: bold;">boolean is_empty = (bar != null &amp;&amp; !bar.empty());</span><span style="background-color: transparent;">
+</span><span style="color: grey;">3 </span><span style="background-color: transparent;">if(</span><span style="background-color: rgb(0 , 250, 108); font-weight: bold;">is_empty</span><span style="background-color: transparent;">)</span><span style="background-color: transparent;">
+</span><span style="color: grey;">4 </span><span style="background-color: transparent;">    bar.first().compute();</span><span style="background-color: transparent;">
+</span><span style="color: grey;">  </span><span style="background-color: transparent;">
+</span><span style="color: grey;">5 </span><span style="background-color: transparent;">
+</span></pre></td></tr></table></td></tr></table></div></body>
+</html>
